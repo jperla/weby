@@ -6,6 +6,9 @@ def h(text):
     #TODO: jperla: should sanitize html
     return (u'%s' % text).replace('<', '&lt;')
 
+def sanitize(text):
+    return (u'%s' % text).replace('<', '&lt;')
+
 def escape_javascript(js):
     return js
 
@@ -65,6 +68,14 @@ def _generate_block_tag(tag_name, default_attrs={}):
                                u'</%s>\n' % tag_name,
                                default_attrs)
 
+def _html_element(tag):
+    def any_element(first=None, attr=None):
+        #TODO: jperla: optimize? pre-compile?
+        if attr == None and (first == None or isinstance(first, dict)):
+            return _generate_block_tag(tag)(first or {})
+        else:
+            return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, attr or {})
+    return any_element
 
 #TODO: jperla: find all tags
 __all_html_tags = [
@@ -77,10 +88,9 @@ __all_html_tags = [
 ]
 for tag in __all_html_tags:
     #TODO: jperla: dont use exec for this
-    exec('%s = _generate_tag("%s")' % (tag, tag))
-    exec('%s_block = _generate_block_tag("%s")' % (tag, tag))
+    exec('%s = _html_element("%s")' % (tag, tag))
 
-code_pre = _generate_element('<code', '><pre>','</pre></code>', {})
+pre_code = _generate_element('<pre', '><code>','</code></pre>', {})
 
 '''
 def h1(text):
