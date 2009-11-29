@@ -1,14 +1,26 @@
 from __future__ import absolute_import
 
 from .templates import template
+from .templates import recursively_iterate
+from . import http
+from . import apps
+from . import defaults
+from . import email
+from . import middleware
+from . import tests
+from . import urls
 
-def recursively_iterate(item):
-    if isinstance(item, str):
-        raise Exception(u'Always work with unicode within your app: %s', item)
-    elif isinstance(item, unicode):
-        yield item
-    else:
-        for subitem in item:
-            for i in recursively_iterate(subitem):
-                yield i
+import os, time, types
+
+def run(app, reload=False):
+    http.server.serve(app, host=defaults.host, port=defaults.port, reload=reload)
+
+def urlable_page(*args):
+    def decorator(f):
+        return apps.urlable(*args)(apps.page()(f))
+    return decorator
+
+
+def wsgify(app, *middleware_to_apply):
+    return middleware.install_middleware(apps.WSGIApp(app), middleware_to_apply)
 

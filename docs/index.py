@@ -14,25 +14,25 @@ def apps(p):
     p(html.pre_code('''
         def hello_world(req):
             yield 200, ['Content-Type: text/html']
-            yield u'<html>Hello, %s</html>' % req.params.gep('name', '')
+            yield u'<html>Hello, %s</html>' % req.params.get('name', '')
     '''))
     p(html.p('Of course, most apps will yield 200 responses. You may not want to type yield out all of the time.  Finally, you probably want an easier way to manage HTTP headers.  We can decorate the request to make it easier to use:'))
     p(html.pre_code('''
         @weby.page()
         def hello_world(req, page):
-            page(u'<html>Hello, %s</html>' % req.params.gep('name', ''))
+            page(u'<html>Hello, %s</html>' % req.params.get('name', ''))
     '''))
     p(html.p('Or equivalently, using the weby template helper html library:'))
     p(html.pre_code('''
         @weby.page()
         def hello_world(req, page):
-            page(html.html(u'Hello, %s' % req.params.gep('name', '')))
+            page(html.html(u'Hello, %s' % req.params.get('name', '')))
     '''))
     p(html.p('Of course, in real code, you should call a separate template function, which of course returns a unicode string:'))
     p(html.pre_code('''
         @weby.page()
         def hello_world(req, page):
-            name = req.params.gep('name', '')
+            name = req.params.get('name', '')
             page(template_hello_world(name))
     '''))
     p(html.p('The decorator accumulates the response for the page, and then yields the correct iterator after your app returns.  See the ' + html.code('WebyPage') + ' documentation for more information about what you can do.  For example, you can use ' + html.code('page.redirect') + ' to send an HTTP 302 Redirect to another page'))
@@ -56,13 +56,13 @@ def urls(p):
 
         @app.subapp('hello')
         def hello_world(req)
-            page(template_hello_world(req.params.gep('name', '')))
+            page(template_hello_world(req.params.get('name', '')))
     '''))
     p(html.p('If you run the app go to "/hello", you will see hello_world running as a subapp of the app, and it probably say something like "Hello, Weby!".'))
     p(html.p('The SimpleDispatchApp is actually Weby\'s default app and dispatching app.  You can nest apps as much as you want.'))
     p(html.pre_code('''
         main_app = weby.defaults.App()
-        @app.subapp(''):
+        @main_app.subapp(''):
         def index(req)
             ...
 
