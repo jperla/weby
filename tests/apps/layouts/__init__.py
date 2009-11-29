@@ -12,7 +12,7 @@ def page_layout(p, title, inside):
         with p(html.head()):
             p(html.title(title))
         with p(html.body()):
-            p.sub(inside)
+            p(inside)
 
 
 # Controllers

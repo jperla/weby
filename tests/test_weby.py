@@ -77,14 +77,6 @@ def test_time_diff():
     assert u'4' not in diff
     assert u'hours' not in diff
 
-"""
-#TODO: jperla: do not know what this does
-def test_url_generation():
-    hello = simplest.app._f.subapp
-    url = hello.url('joe')
-    assert url == u'/joe'
-"""
-
 def test_template():
     with get(weby.wsgify(first_template.app), '/hello?name=joe') as r:
         assert u'200' in r.status
@@ -103,10 +95,19 @@ def test_static_app():
     content = u'div {\n    color: blue;\n}\n'
     with get(weby.wsgify(standard.app), u'/static/style.css') as r:
         assert content == r.body
-"""
 
 def test_send_email():
     with difference(lambda:len(send_email.mail_server.sent_email)):
         with get(send_email.wrapped_app, '/static/style.css') as r:
             assert u'200' in r.status
+
+"""
+
+"""
+#TODO: jperla: do not know what this does
+def test_url_generation():
+    hello = simplest.app._f.subapp
+    url = hello.url('joe')
+    assert url == u'/joe'
+"""
 

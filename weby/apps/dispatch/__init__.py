@@ -74,11 +74,10 @@ class SimpleDispatchApp(DispatchApp):
                 raise _http.status.not_found()
 
     def register_subapp(self, subapp, path):
-        name = path
-        if name in self.apps:
+        if path in self.apps:
             raise Exception(u'Already dispatching to path: %s' % path)
-        self.apps[name] = subapp
-        self.urls[subapp] = name
+        self.apps[path] = subapp
+        self.urls[subapp] = path
 
     def parented_url(self, subapp, suburl):
         assert(subapp in self.urls or subapp == self.default)

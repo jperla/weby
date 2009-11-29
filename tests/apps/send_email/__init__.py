@@ -1,28 +1,28 @@
-import webify
+import weby
 
-app = webify.apps.SingleApp()
+app = weby.defaults.App()
 
-@app.subapp()
-@webify.urlable()
-def send(req, p):
+@app.default_subapp()
+@weby.urlable_page()
+def send(req, page):
     email = req.params.get(u'email', u'nobody@jperla.com')
     mail_server = req.settings[u'mail_server']
-    message = webify.email.create_text_message(u'nobody@jperla.com',
+    message = weby.email.create_text_message(u'nobody@jperla.com',
                                                 [email],
                                                 u'Hello, World!',
                                                 u'I am sending you a text message')
     mail_server.send_message(message)
-    p(u'Sent email.')
+    page(u'Sent email.')
 
 # Middleware
-from webify.middleware import SettingsMiddleware
+from weby.middleware import SettingsMiddleware
 
-mail_server = webify.email.TestMailServer()
+mail_server = weby.email.TestMailServer()
 settings = {'mail_server': mail_server}
-wrapped_app = webify.wsgify(app, SettingsMiddleware(settings))
+wrapped_app = weby.wsgify(app, SettingsMiddleware(settings))
 
 
 if __name__ == '__main__':
-    webify.run(wrapped_app)
+    weby.run(wrapped_app)
     
 # Try Loading http://127.0.0.1:8080/hello/world?times=1000000
