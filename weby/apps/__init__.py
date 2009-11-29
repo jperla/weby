@@ -81,10 +81,10 @@ class UrlableApp(WebyApp):
         self._parsers = parsers
     def __call__(self, req):
         args = []
-        url = req.application_url
+        url = req.path_info
         for parser in self._parsers:
             new_args, url = parser.parse(req, url)
-            args.append(new_args)
+            args.extend(new_args)
         return self._f(req, *args)
     def url(self, *args):
         url = '/'
