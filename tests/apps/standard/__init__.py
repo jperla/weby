@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 import time
 
-import webify
+import weby
 
-app = webify.defaults.app()
+app = weby.defaults.App()
 
 # Controllers
-@app.subapp(path='/')
-@webify.urlable()
-def index(req, p):
-    p(u'Hello, world!')
+@app.subapp('/')
+@weby.urlable_page()
+def index(req, page):
+    page(u'Hello, world!')
 
 static_path = u'tests/apps/standard/static/'
-static = app.subapp(path='/static')(webify.apps.standard.static(static_path))
+static = app.subapp('static')(weby.apps.standard.static(static_path))
     
 
 # Middleware
-from webify.middleware import EvalException
-wrapped_app = webify.wsgify(app, EvalException)
+from weby.middleware import EvalException
+wrapped_app = weby.wsgify(app, EvalException)
 
 # Server
-from webify.http import server
+from weby.http import server
 if __name__ == '__main__':
     server.serve(wrapped_app, host='127.0.0.1', port=8080)
 

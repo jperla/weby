@@ -27,7 +27,7 @@ class intparse(UrlParse):
 
 class remaining(UrlParse):
     def parse(self, req, url):
-        assert(url.startswith('/'))
+        assert(url.startswith(u'/'))
         return [url[1:]], u''
 
     def generate(self, args, url):

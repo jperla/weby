@@ -14,15 +14,11 @@ def send(req, page):
     mail_server.send_message(message)
     page(u'Sent email.')
 
-# Middleware
-from weby.middleware import SettingsMiddleware
-
 mail_server = weby.email.TestMailServer()
 settings = {'mail_server': mail_server}
-wrapped_app = weby.wsgify(app, SettingsMiddleware(settings))
-
+app = weby.apps.SettingsApp(settings, app)
 
 if __name__ == '__main__':
-    weby.run(wrapped_app)
+    weby.run(weby.wsgify(app))
     
 # Try Loading http://127.0.0.1:8080/hello/world?times=1000000

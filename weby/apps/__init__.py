@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import chardet
 
 from .. import http
 from ..templates import recursively_iterate
@@ -74,6 +75,18 @@ class WSGIApp(object):
             start_response(status, headers)
             return resp
 
+class SettingsApp(WebyApp):
+    def __init__(self, settings, f):
+        WebyApp.__init__(self)
+        self._settings = settings
+        self._f = f
+    def __call__(self, req):
+        req.settings = self._settings
+        return self._f(req)
+    def url(self):
+        url = u'/'
+        return self.parent.wrap_url(self, url)
+
 class UrlableApp(WebyApp):
     def __init__(self, f, parsers):
         WebyApp.__init__(self)
@@ -81,13 +94,15 @@ class UrlableApp(WebyApp):
         self._parsers = parsers
     def __call__(self, req):
         args = []
-        url = req.path_info
+        #TODO: jperla: assumes utf-8
+        url = u'%s' % req.path_info.decode('utf-8')
+        #TODO: jperla: wrongly?
         for parser in self._parsers:
             new_args, url = parser.parse(req, url)
             args.extend(new_args)
         return self._f(req, *args)
     def url(self, *args):
-        url = '/'
+        url = u'/'
         for parser in self._parsers:
             args, url = parser.generate(args, url)
         return self.parent.wrap_url(self, url)
@@ -103,4 +118,5 @@ def output_encoding(strings, encoding):
         yield encoded
 
 from . import dispatch
+from . import standard
 
