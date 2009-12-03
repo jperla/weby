@@ -13,15 +13,17 @@ Example: a complete Weby application
 
     import weby
 
-    @weby.single_app()
-    def app(req, p, name):
+    app = weby.defaults.App()
+
+    @app.default_subapp()
+    @weby.urlable_page(weby.urls.remaining())
+    def app(req, page, name):
         times = req.params.get('times', 1)
         for i in xrange(int(times)):
-            p(u'Hello, %s!<br />' % (name or u'world'))
+            page(u'Hello, %s!<br />' % (name or u'world'))
 
     if __name__ == '__main__':
         weby.run(weby.wsgify(app))
-
 
 Programming and Design Philosophy
 =================================
@@ -49,39 +51,47 @@ Weby already includes
 - Controllers
 - Templates and helpers
 - Beautiful Urls
-- Forms
-- Middleware
-- A production server thread
 - Smallest python webapps in production
 - Very extensible and easy to understand
-- Error handling framework
-- Webapp testing framework
-- Standard template filters
 - Natural code layout using python packages
-- Email framework
-- A debugging server thread
-- Web args
-- Pluggable sub-webapps
+- A production server thread
+- Error handling server thread
+- Webapp testing framework
 - Full Unicode compliance and safety
-- Layout system for templates
-- RSS Feeds
-- Cache system
+- Email framework
 
 Weby still needs, in order,
 
-- Redo dispatchers
-- Redo redirecters and page objects / templates
-- Sessions and authentication*
-- Models and backend storage*
-- Ecosystem of pluggable sub-webapps*
 - Documentation, auto-generated from codebase, with auto-tests
-- Testing framework data fixtures
-- Auto-admin (databrowse?)*
+- Redo redirecters and page objects / templates
+
+- Cache system
+
+- Middleware
+- Standard template filters
+- Forms
+
+- Sessions and authentication*
 - CSRF protection
+
+- Layout system for templates
 - XSS Protection
-- Sitemaps
 - Internationalization*
+
+- A debugging server thread
+- Event-based server thread
+
+- Pluggable sub-webapps
+- Ecosystem of pluggable sub-webapps*
+
 - Synchronous and asynchronous signals and dispatchers*
+
+Requires some kind of data decision***:
+- Models and backend storage*
+- Auto-admin (databrowse?)*
+- Sitemaps
+- RSS Feeds
+- Testing framework data fixtures
 
 *requires a hard design decision
 
