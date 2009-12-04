@@ -62,8 +62,8 @@ Weby already includes
 
 Weby still needs, in order,
 
-- Documentation, auto-generated from codebase, with auto-tests
-- Redo redirecters and page objects / templates
+- Documentation, auto-generated from codebase, with auto-tests*
+- Redo redirecters and page objects*
 
 - Cache system
 
@@ -75,7 +75,7 @@ Weby still needs, in order,
 - CSRF protection
 
 - Layout system for templates
-- XSS Protection
+- XSS Protection*
 - Internationalization*
 
 - A debugging server thread
@@ -85,6 +85,9 @@ Weby still needs, in order,
 - Ecosystem of pluggable sub-webapps*
 
 - Synchronous and asynchronous signals and dispatchers*
+
+- PyQuery based templates
+- manage.py (run server, build url trees, what else?)
 
 Requires some kind of data decision***:
 - Models and backend storage*
