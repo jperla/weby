@@ -73,7 +73,7 @@ class WSGIApp(object):
             return resp(environ, start_response)
         else:
             start_response(status, headers)
-            return resp
+            return list(resp)
 
 class SettingsApp(WebyApp):
     def __init__(self, settings, f):
