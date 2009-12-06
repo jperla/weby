@@ -41,11 +41,11 @@ class WebyPage(object):
         yield self.status, self.headers
         #TODO: jperla: serious work needed here
         if self.headers[0] == http.headers.content_types.html_utf8:
-            for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
-                yield x
+            #TODO: jperla: make this yielding and working
+            yield ''.join(x for x in output_encoding(recursively_iterate(self.__response), 'utf8'))
         else:
-            for x in self.__response.append(x):
-                yield x
+            #TODO: jperla: make this yielding and working
+            yield ''.join(x for x in self.__response.append(x))
 
 def page():
     def decorator(f):
@@ -73,7 +73,7 @@ class WSGIApp(object):
             return resp(environ, start_response)
         else:
             start_response(status, headers)
-            return resp
+            return list(resp)
 
 class SettingsApp(WebyApp):
     def __init__(self, settings, f):
