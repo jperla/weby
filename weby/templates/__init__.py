@@ -111,3 +111,41 @@ def template():
             return accumulator.accumulated
         return new_f
     return decorator
+
+class CleanString(object):
+    def __init__(self, sanitizer, o):
+        self.sanitizer = sanitizer
+        self.o = o
+
+    def __eq__(self, x):
+        return self.o == x
+
+    def __len__(self):
+        return len(self.o)
+    
+    def __getattr__(self, x):
+        value = getattr(self.o, x)
+        if isinstance(value, basestring):
+            return self.sanitizer(value)
+        elif isinstance(value, CleanString):
+            return value
+        elif x == 'raw':
+            return self.o
+        else:
+            return CleanString(self.sanitizer, value)
+
+    def __iter__(self):
+        for value in self.o:
+            yield CleanString(self.sanitizer, value)
+
+    def __str__(self):
+        return self.sanitizer(self.o)
+
+def sanitize_html():
+    def decorator(f):
+        def new_f(*args):
+            clean_args = [CleanString(helpers.html.sanitize, a) for a in args]
+            return f(*clean_args)
+        return new_f
+    return decorator
+

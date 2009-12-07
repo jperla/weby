@@ -29,8 +29,9 @@ def receive(changes, event):
     child_pid = changes['child']
     valid_change = changes['valid_change']
     if valid_change(event):
-        print str(event.pathname)
-        print str(event.maskname)
+        #DEBUG: jperla: 
+        #print str(event.pathname)
+        #print str(event.maskname)
         if child_pid is not None:
             os.kill(child_pid, signal.SIGINT)
             os.waitpid(child_pid, 0)
@@ -52,7 +53,7 @@ def fork_child_and_run(changes):
         changes['child']= r
 
 def run_app(host, port, modules, app):
-    print 'Loading server...'
+    print 'Loading server on %s:%s...' % (host, port)
     for module in modules:
         reload(module)
     server.tornado.start(app, host=host, port=port)
