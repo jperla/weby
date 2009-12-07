@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 import chardet
 
-from .. import http
 from ..templates import recursively_iterate
 
 
@@ -28,7 +27,7 @@ class WebyApp(object):
 class WebyPage(object):
     def __init__(self):
         self.__response = []
-        status, headers = http.defaults.status_and_headers
+        status, headers = defaults.status_and_headers
         self.status, self.headers = status, headers
 
     def __call__(self, x):
@@ -40,12 +39,14 @@ class WebyPage(object):
     def response(self):
         yield self.status, self.headers
         #TODO: jperla: serious work needed here
-        if self.headers[0] == http.headers.content_types.html_utf8:
+        if self.headers[0] == headers.content_types.html_utf8:
             #TODO: jperla: make this yielding and working
-            yield ''.join(x for x in output_encoding(recursively_iterate(self.__response), 'utf8'))
+            for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
+                yield x
         else:
             #TODO: jperla: make this yielding and working
-            yield ''.join(x for x in self.__response.append(x))
+            for x in self.__response.append(x):
+                yield x
 
 def page():
     def decorator(f):
@@ -64,11 +65,11 @@ class WSGIApp(object):
         self.app = app
 
     def __call__(self, environ, start_response):
-        req = http.Request(environ)
+        req = Request(environ)
         try:
             resp = self.app(req)
             status, headers = resp.next()
-        except http.status.HTTPController, exception:
+        except status.HTTPController, exception:
             resp = exception
             return resp(environ, start_response)
         else:
@@ -117,6 +118,8 @@ def output_encoding(strings, encoding):
         encoded = s.encode(encoding)
         yield encoded
 
+#TODO: jperla: 'as' this
+from ..http import defaults, headers, Request, status
 from . import dispatch
 from . import standard
 

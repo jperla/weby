@@ -8,6 +8,7 @@ from . import defaults
 from . import email
 from . import middleware
 from . import tests
+from . import tools
 from . import urls
 
 import os, time, types

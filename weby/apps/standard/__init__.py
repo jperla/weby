@@ -4,10 +4,17 @@ import os
 import chardet
 import codecs
 
-from .. import urlable
+from .. import urlable, page, WebyApp
 from ... import urls
-from ... import http
+from ...http import status
 from ...http.headers import content_types
+
+def HTTP404App():
+    def f(req):
+        headers = [content_types.html_utf8]
+        yield 404, headers
+        yield 'Page not found'
+    return f
 
 def static(file_root):
     '''

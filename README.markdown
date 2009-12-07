@@ -89,12 +89,14 @@ Weby still needs, in order,
 - PyQuery based templates
 - manage.py (run server, build url trees, what else?)
 
-Requires some kind of data decision***:
+Requires some kind of hard data decision***:
+
 - Models and backend storage*
 - Auto-admin (databrowse?)*
 - Sitemaps
 - RSS Feeds
 - Testing framework data fixtures
+
 
 *requires a hard design decision
 

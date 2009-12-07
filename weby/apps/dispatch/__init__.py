@@ -5,8 +5,9 @@ import logging
 import wsgiref
 from wsgiref import util
 
-from ... import http as _http
+from ...http import status
 from .. import WebyApp
+from ..standard import HTTP404App
 
 class DispatchApp(WebyApp):
     def __init__(self):
@@ -71,7 +72,7 @@ class SimpleDispatchApp(DispatchApp):
             if self.default is not None:
                 return self.default, req
             else:
-                raise _http.status.not_found()
+                return HTTP404App(), req
 
     def register_subapp(self, subapp, path):
         if path in self.apps:

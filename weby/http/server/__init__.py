@@ -2,7 +2,6 @@ from __future__ import absolute_import
 import logging
 import wsgiref
 
-from . import tornado_server as tornado
 
 def wsgiref_serve(app, host, port, reload=False):
     if reload:
@@ -56,3 +55,4 @@ else:
         
 
         
+from . import tornado_server as tornado
