@@ -59,11 +59,16 @@ Weby already includes
 - Webapp testing framework
 - Full Unicode compliance and safety
 - Email framework
+- XSS Protection
+- Event-based server thread
 
 Weby still needs, in order,
 
+- A debugging server thread
 - Documentation, auto-generated from codebase, with auto-tests*
 - Redo redirecters and page objects*
+
+- manage.py (run server, build url trees, what else?)
 
 - Cache system
 
@@ -75,11 +80,7 @@ Weby still needs, in order,
 - CSRF protection
 
 - Layout system for templates
-- XSS Protection*
 - Internationalization*
-
-- A debugging server thread
-- Event-based server thread
 
 - Pluggable sub-webapps
 - Ecosystem of pluggable sub-webapps*
@@ -87,7 +88,6 @@ Weby still needs, in order,
 - Synchronous and asynchronous signals and dispatchers*
 
 - PyQuery based templates
-- manage.py (run server, build url trees, what else?)
 
 Requires some kind of hard data decision***:
 
