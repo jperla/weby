@@ -35,6 +35,11 @@ class WebyPage(object):
 
     def print_response(self, x):
         self.__response.append(x)
+    
+    def redirect(self, url, type=302):
+        assert type == 301 or type == 302, 'Redirect must be 301 or 302'
+        self.status = '%s %s' % (type, headers.reason_phrases[type])
+        self.headers += ('Location', url)
 
     def response(self):
         yield self.status, self.headers

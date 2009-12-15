@@ -8,6 +8,8 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
+from ...http import reason_phrases
+
 def wrap_tornado(app):
     def new(tornado_request):
         #TODO: jperla: wrap into complete wsgi-like request
@@ -15,10 +17,16 @@ def wrap_tornado(app):
         req = webob.Request.blank(tornado_request.path + '?' + args)
         body = app(req)
         status, headers = body.next()
-        content = ''.join(body)
         #TODO: jperla: make this return 404 appropriately
-        tornado_request.write("HTTP/1.1 200 OK\r\nContent-Type:text/html\r\nContent-Length: %d\r\n\r\n%s" % (
-                        len(content), content))
+        status_line = 'HTTP/1.1 %s\r\n' % status
+        headers = ''.join(['%s: %s\r\n' % h for h in headers])
+        #content_length = 'Content-Length: %d\r\n' % len(content)
+        tornado_request.write(status_line + headers + '\r\n')
+        for b in body:
+            if not isinstance(b, str):
+                print b
+                print 'not a string!'
+            tornado_request.write(b)
         #TODO: jperla: make this iterate?
         tornado_request.finish()
     return new

@@ -33,7 +33,7 @@ def receive(changes, event):
         #print str(event.pathname)
         #print str(event.maskname)
         if child_pid is not None:
-            os.kill(child_pid, signal.SIGINT)
+            os.kill(child_pid, signal.SIGKILL)
             os.waitpid(child_pid, 0)
             fork_child_and_run(changes)
         else:
@@ -52,25 +52,25 @@ def fork_child_and_run(changes):
         # in parent
         changes['child']= r
 
-def run_app(host, port, modules, app):
-    print 'Loading server on %s:%s...' % (host, port)
-    for module in modules:
-        reload(module)
-    server.tornado.start(app, host=host, port=port)
+def reload(filename):
+    __name__ = '__main__'
+    code = compile(open(filename).read(), filename, 'exec')
+    exec(code, locals(), locals())
 
-def watcher_launcher(modules, app):
+def run_app(file):
+    reload(file)
+
+def watcher_launcher():
     import optparse
     parser = optparse.OptionParser()
-    parser.add_option("-p", "--port", dest="port", default=8080,
-                    help="port number", type="int")
-    parser.add_option("-a", "--address",
-                    dest="host", default="127.0.0.1",
-                    help="host ip address")
+    parser.add_option("-f", "--file", dest="file", default=None,
+                    help="file")
     parser.add_option("-q", "--quiet",
                     action="store_false", dest="verbose", default=True,
                     help="don't print status messages to stdout")
     (options, args) = parser.parse_args()
-    app = partial(run_app, options.host, options.port, modules, app)
+    file = options.file
+    app = partial(run_app, file)
     changes = {'valid_change':valid_change, 'child':None, 'app':app}
     receive_with_changes = partial(receive, changes)
     fork_child_and_run(changes)
