@@ -23,9 +23,6 @@ def wrap_tornado(app):
         #content_length = 'Content-Length: %d\r\n' % len(content)
         tornado_request.write(status_line + headers + '\r\n')
         for b in body:
-            if not isinstance(b, str):
-                print b
-                print 'not a string!'
             tornado_request.write(b)
         #TODO: jperla: make this iterate?
         tornado_request.finish()
