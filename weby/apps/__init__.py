@@ -81,7 +81,16 @@ class WSGIApp(object):
             start_response(status, headers)
             return list(resp)
 
-class SettingsApp(WebyApp):
+class MiddleApp(WebyApp):
+    def __init__(self):
+        raise NotImplementedException
+    def __call__(self, req):
+        raise NotImplementedException
+    def url(self):
+        url = u'/'
+        return self.parent.wrap_url(self, url)
+
+class SettingsMiddleApp(MiddleApp):
     def __init__(self, settings, f):
         WebyApp.__init__(self)
         self._settings = settings
@@ -89,9 +98,6 @@ class SettingsApp(WebyApp):
     def __call__(self, req):
         req.settings = self._settings
         return self._f(req)
-    def url(self):
-        url = u'/'
-        return self.parent.wrap_url(self, url)
 
 class UrlableApp(WebyApp):
     def __init__(self, f, parsers):
