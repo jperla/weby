@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from .parsers import *
+from .parsers import UrlParse, intparse, remaining
 
 def Url(object):
     def __init__(self, url):

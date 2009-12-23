@@ -20,10 +20,12 @@ def wrap_tornado(app):
         #TODO: jperla: make this return 404 appropriately
         status_line = 'HTTP/1.1 %s\r\n' % status
         headers = ''.join(['%s: %s\r\n' % h for h in headers])
-        #content_length = 'Content-Length: %d\r\n' % len(content)
-        tornado_request.write(status_line + headers + '\r\n')
-        for b in body:
-            tornado_request.write(b)
+        content = ''.join(body)
+        content_length = 'Content-Length: %d\r\n' % len(content)
+        tornado_request.write(status_line + content_length + headers + '\r\n')
+        tornado_request.write(content);
+        #for b in body:
+        #    tornado_request.write(b)
         #TODO: jperla: make this iterate?
         tornado_request.finish()
     return new
@@ -35,5 +37,7 @@ def start(app, host=None, port=8088):
     http_server = tornado.httpserver.HTTPServer(tornado_app)
     http_server.listen(port)
     tornado.ioloop.IOLoop.instance().start()
+
+serve = start
 
 from ...apps import WSGIApp, WebyApp
