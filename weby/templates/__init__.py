@@ -25,13 +25,13 @@ def joined(*targs, **tkwargs):
     return decorator
     
 class Accumulator(object):
-    def __init__(self, accumulated=None, start=u'', end=u''):
+    def __init__(self, accumulated=None, start=None, end=[]):
         if accumulated is None:
             self.accumulated = []
         else:
             self.accumulated = accumulated
         self.start = start
-        self.end = [end]
+        self.end = end 
     def __catch(self, s):
         self.accumulated.append(s)
     def __call__(self, r):
@@ -41,6 +41,8 @@ class Accumulator(object):
             start, end = r
             assert(isinstance(start, unicode))
             assert(isinstance(end, unicode))
+            if self.start is not None:
+                raise Exception('Start is not cleared out: %s %s' % (type(self.start), self.start))
             self.start = start
             self.end.insert(0, end)
             return self
@@ -58,6 +60,7 @@ class Accumulator(object):
     '''
     def __enter__(self):
         self.__catch(self.start)
+        self.start = None
         return self
     def __exit__(self, type, value, tb):
         self.__catch(self.end[0])

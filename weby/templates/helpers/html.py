@@ -6,22 +6,31 @@ def h(text):
     #TODO: jperla: should sanitize html
     return (u'%s' % text).replace('<', '&lt;')
 
+def nonbreak(text):
+    return text.replace(' ', '&nbsp;')
+
 def sanitize(text):
     return (u'%s' % text).replace('<', '&lt;')
 
 def escape_javascript(js):
     return js
 
+def __attribute_html(attrs):
+    attribute_html = u' '.join(u'%s="%s"' % (k, v) 
+                            for k,v in attrs.iteritems() if v is not None)
+    if attribute_html != u'':
+        attribute_html = u' ' + attribute_html
+    return attribute_html
+
 def _generate_element(open, end_open, close, default_attrs):
     def new_element(html, attrs={}):
+        if not isinstance(html, basestring): 
+            raise Exception('Not a string: %s' % html)
         attrs = __merge(default_attrs, attrs)
-        attribute_html = u' '.join(u'%s="%s"' % (k, v) 
-                                for k,v in attrs.iteritems() if v is not None)
-        if attribute_html != u'':
-            attribute_html = u' ' + attribute_html
+        attribute_html = __attribute_html(attrs)
         # Remove newline if the previous html already has one
         html = html[:-1] if html.endswith('\n') else html
-        return open + attribute_html + end_open + html + close + u'\n'
+        return u'%s%s%s%s%s\n' % (open, attribute_html, end_open, html, close)
     return new_element
 
 def _generate_tag(name, attrs={}):
@@ -29,10 +38,10 @@ def _generate_tag(name, attrs={}):
 
 
 
-def ahref(href=None, text='', attrs={}):
+def a_href(href=None, text='', attrs={}):
     attrs['href'] = href
     options = u' '.join(u'%s="%s"' % (k, attrs[k]) for k in attrs)
-    return u'<a %(options)s>%(text)s</a>' % { u'text':h(text), u'options':options}
+    return u'<a %(options)s>%(text)s</a>' % { u'text':text, u'options':options}
 
 def br():
     return u'<br />\n'
@@ -68,13 +77,21 @@ def _generate_block_tag(tag_name, default_attrs={}):
                                u'</%s>\n' % tag_name,
                                default_attrs)
 
+no_arg = object()
 def _html_element(tag):
-    def any_element(first=None, attr=None):
+    def any_element(first=no_arg, attr=no_arg):
         #TODO: jperla: optimize? pre-compile?
-        if attr == None and (first == None or isinstance(first, dict)):
-            return _generate_block_tag(tag)(first or {})
+        if attr == no_arg and (first == no_arg or isinstance(first, dict)):
+            attr = first
+            if attr == no_arg:
+                return _generate_block_tag(tag)({})
+            else:
+                return _generate_block_tag(tag)(attr)
         else:
-            return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, attr or {})
+            if attr == no_arg:
+                return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, {})
+            else:
+                return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, attr)
     return any_element
 
 #TODO: jperla: find all tags
@@ -83,7 +100,7 @@ __all_html_tags = [
 'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 
 'table', 'thead', 'tbody', 'tr', 'th', 'td',
 'img', 'span', 'div', 'code', 'pre',
-'html', 'head', 'body', 'title',
+'html', 'head', 'body', 'title', 'meta', 'link', 'script',
 'form', 'textarea', 'input', 'button',
 ]
 for tag in __all_html_tags:

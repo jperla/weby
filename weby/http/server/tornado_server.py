@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import os
 import sys
 import urllib
 import urlparse
@@ -59,6 +60,7 @@ def wsgi_environ_from_tornado_request(tornado_request):
     environ['wsgi.multithread'] = True
     environ['wsgi.multiprocess'] = True
     environ['wsgi.run_once'] = False
+    environ['PWD'] = os.getcwd()
     for h,v in tornado_request.headers.iteritems():
         environ['HTTP_%s' % h.upper().replace('-', '_')] = v
     #TODO: jperla: put in content type and length for file uploads ?
