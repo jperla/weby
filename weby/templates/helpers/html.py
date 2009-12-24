@@ -6,7 +6,7 @@ def h(text):
     #TODO: jperla: should sanitize html
     return (u'%s' % text).replace('<', '&lt;')
 
-def nonbreak(text):
+def nobreaks(text):
     return text.replace(' ', '&nbsp;')
 
 def sanitize(text):
@@ -24,13 +24,14 @@ def __attribute_html(attrs):
 
 def _generate_element(open, end_open, close, default_attrs):
     def new_element(html, attrs={}):
-        if not isinstance(html, basestring): 
-            raise Exception('Not a string: %s' % html)
         attrs = __merge(default_attrs, attrs)
         attribute_html = __attribute_html(attrs)
-        # Remove newline if the previous html already has one
-        html = html[:-1] if html.endswith('\n') else html
-        return u'%s%s%s%s%s\n' % (open, attribute_html, end_open, html, close)
+        if html is not None:
+            # Remove newline if the previous html already has one
+            html = html[:-1] if html.endswith('\n') else html
+            return u'%s%s%s%s%s\n' % (open, attribute_html, end_open, html, close)
+        else:
+            return u'%s%s />\n' % (open, attribute_html)
     return new_element
 
 def _generate_tag(name, attrs={}):
@@ -59,7 +60,7 @@ link_css = lambda href,media=u'screen': _generate_tag(u'link',
                                                       {u'type':u'text/css', 
                                                        u'rel':u'Stylesheet',
                                                        u'media':media,
-                                                       u'href':href})(u'')
+                                                       u'href':href})(None)
 
 def _generate_container(open, end_open, close, default_attrs={}):
     def new_container(attrs={}):
@@ -86,11 +87,13 @@ def _html_element(tag):
             if attr == no_arg:
                 return _generate_block_tag(tag)({})
             else:
+                assert isinstance(attr, dict), '%s not a dict' % attr
                 return _generate_block_tag(tag)(attr)
         else:
             if attr == no_arg:
                 return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, {})
             else:
+                assert isinstance(attr, dict), '%s not a dict' % attr
                 return _generate_element('<%s' % tag, '>', '</%s>' % tag, {})(first, attr)
     return any_element
 
@@ -158,10 +161,12 @@ def form(action=u'', method=u'POST', attrs={}):
 
 
 def __merge(d1, d2):
+    #assert isinstance(d1, dict), '%s not a dict' % d1
+    #assert isinstance(d2, dict), '%s not a dict' % d2
     return dict([(k,v) for k,v in itertools.chain(d1.iteritems(), d2.iteritems())])
 
 input = lambda attrs: _generate_tag(u'input',
-                                    __merge({u'type':u'text'}, attrs))(u'')
+                                    __merge({u'type':u'text'}, attrs))(None)
 
 def _generate_input(type):
     def new_input(name=None, value=None, id=None, attrs={}):
