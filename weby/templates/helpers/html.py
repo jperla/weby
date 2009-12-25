@@ -2,17 +2,16 @@ from contextlib import contextmanager
 import itertools
 
 
-def h(text):
-    #TODO: jperla: should sanitize html
-    return (u'%s' % text).replace('<', '&lt;')
-
 def nobreaks(text):
-    return text.replace(' ', '&nbsp;')
+    return (u'%s' % text).replace(' ', '&nbsp;')
 
 def sanitize(text):
+    #TODO: jperla: should sanitize html
     return (u'%s' % text).replace('<', '&lt;')
+h = sanitize
 
 def escape_javascript(js):
+    #TODO: jperla: should escape js
     return js
 
 def __attribute_html(attrs):
