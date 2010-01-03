@@ -115,7 +115,7 @@ def template():
         return new_f
     return decorator
 
-class CleanString(object):
+class CleanObject(object):
     def __init__(self, sanitizer, o):
         self.sanitizer = sanitizer
         self.o = o
@@ -123,28 +123,44 @@ class CleanString(object):
     def __eq__(self, x):
         return self.o == x
 
+    def __gt__(self, x):
+        return self.o > x
+    def __gte__(self, x):
+        return self.o >= x
+    def __lt__(self, x):
+        return self.o < x
+    def __lte__(self, x):
+        return self.o <= x
+
     def __len__(self):
         return len(self.o)
+
+    def __getitem__(self, item):
+        return self.__sanitize_object(self.o.__getitem__(item))
     
     def __getattr__(self, x):
         value = getattr(self.o, x)
-        if isinstance(value, basestring):
-            return self.sanitizer(value)
-        elif isinstance(value, CleanString):
+        if x == 'raw':
             return value
-        elif x == 'raw':
-            return self.o
-        elif value is None:
-            return None
         else:
-            return CleanString(self.sanitizer, value)
+            return self.__sanitize_object(value)
 
     def __call__(self, *args, **kwargs):
-        return CleanString(self.sanitizer, self.o(*args, **kwargs))
+        return self.__sanitize_object(self.o(*args, **kwargs))
 
     def __iter__(self):
         for value in self.o:
-            yield CleanString(self.sanitizer, value)
+            yield self.__sanitize_object(value)
+
+    def __sanitize_object(self, value):
+        if isinstance(value, basestring):
+            return self.sanitizer(value)
+        elif isinstance(value, CleanObject):
+            return value
+        elif value is None:
+            return None
+        else:
+            return CleanObject(self.sanitizer, value)
 
     def __str__(self):
         return self.sanitizer(self.o)
@@ -152,10 +168,11 @@ class CleanString(object):
     def __unicode__(self):
         return self.sanitizer(unicode(self.o))
 
+
 def sanitize_html():
     def decorator(f):
         def new_f(*args):
-            clean_args = [CleanString(helpers.html.sanitize, a) for a in args]
+            clean_args = [CleanObject(helpers.html.sanitize, a) for a in args]
             return f(*clean_args)
         return new_f
     return decorator
