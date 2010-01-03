@@ -149,6 +149,9 @@ class CleanString(object):
     def __str__(self):
         return self.sanitizer(self.o)
 
+    def __unicode__(self):
+        return self.sanitizer(unicode(self.o))
+
 def sanitize_html():
     def decorator(f):
         def new_f(*args):
