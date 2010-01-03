@@ -3,11 +3,11 @@ import itertools
 
 
 def nobreaks(text):
-    return (u'%s' % text).replace(' ', '&nbsp;')
+    return (u'%s' % text).replace(u' ', u'&nbsp;')
 
 def sanitize(text):
     #TODO: jperla: should sanitize html
-    return (u'%s' % text).replace('<', '&lt;')
+    return (u'%s' % text).replace(u'<', u'&lt;')
 h = sanitize
 
 def escape_javascript(js):
@@ -27,10 +27,12 @@ def _generate_element(open, end_open, close, default_attrs):
         attribute_html = __attribute_html(attrs)
         if html is not None:
             # Remove newline if the previous html already has one
-            html = html[:-1] if html.endswith('\n') else html
-            return u'%s%s%s%s%s\n' % (open, attribute_html, end_open, html, close)
+            #html = html[:-1] if html.endswith('\n') else html
+            #return u'%s%s%s%s%s\n' % (open, attribute_html, end_open, html, close)
+            return u'%s%s%s%s%s' % (open, attribute_html, end_open, html, close)
         else:
-            return u'%s%s />\n' % (open, attribute_html)
+            #return u'%s%s />\n' % (open, attribute_html)
+            return u'%s%s />' % (open, attribute_html)
     return new_element
 
 def _generate_tag(name, attrs={}):

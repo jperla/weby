@@ -134,8 +134,13 @@ class CleanString(object):
             return value
         elif x == 'raw':
             return self.o
+        elif value is None:
+            return None
         else:
             return CleanString(self.sanitizer, value)
+
+    def __call__(self, *args, **kwargs):
+        return CleanString(self.sanitizer, self.o(*args, **kwargs))
 
     def __iter__(self):
         for value in self.o:

@@ -24,10 +24,17 @@ def wrap_tornado(app):
         #TODO: jperla: make this return 404 appropriately
         status_line = 'HTTP/1.1 %s\r\n' % status
         headers = ''.join(['%s: %s\r\n' % h for h in headers])
+        if isinstance(headers, unicode):
+            #TODO: jperla: assumed utf8?
+            headers = headers.encode('utf-8')
         content = ''.join(body)
-        content_length = 'Content-Length: %d\r\n' % len(content)
-        tornado_request.write(status_line + content_length + headers + '\r\n')
-        tornado_request.write(content);
+        content_length = 'Content-Length: %d\r\n' % len(content) if len(content) > 0 else ''
+        top = status_line + content_length + headers + '\r\n'
+        assert isinstance(top, str), '%s, %s is not a str' % (type(top), top)
+        tornado_request.write(top)
+        if len(content) > 0:
+            assert isinstance(content, str), '%s, %s is not a str' % (type(content), content)
+            tornado_request.write(content);
         #for b in body:
         #    tornado_request.write(b)
         #TODO: jperla: make this iterate?

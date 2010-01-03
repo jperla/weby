@@ -38,8 +38,8 @@ class WebyPage(object):
     
     def redirect(self, url, type=302):
         assert type == 301 or type == 302, 'Redirect must be 301 or 302'
-        self.status = '%s %s' % (type, headers.reason_phrases[type])
-        self.headers += ('Location', url)
+        self.status = '%s %s' % (type, reason_phrases[type])
+        self.headers.append(('Location', url))
 
     def response(self):
         yield self.status, self.headers
@@ -130,7 +130,7 @@ def output_encoding(strings, encoding):
         yield encoded
 
 #TODO: jperla: 'as' this
-from ..http import defaults, headers, Request, status
+from ..http import defaults, headers, Request, status, reason_phrases
 from . import dispatch
 from . import standard
 
