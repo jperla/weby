@@ -132,6 +132,20 @@ class CleanObject(object):
     def __lte__(self, x):
         return self.o <= x
 
+    def __int__(self):
+        return int(self.o)
+    def __float__(self):
+        return float(self.o)
+
+    def __mul__(self, x):
+        return self.o * float(x)
+    def __div__(self, x):
+        return self.o / float(x)
+    def __add__(self, x):
+        return self.o + float(x)
+    def __sub__(self, x):
+        return self.o - float(x)
+
     def __len__(self):
         return len(self.o)
 
