@@ -24,13 +24,18 @@ class intparse(UrlParse):
         assert(len(args) > 0)
         return args[1:], u'%s%s/' % (url, args[0])
 
+import urllib
 
 class remaining(UrlParse):
     def parse(self, req, url):
         assert(url.startswith(u'/'))
-        return [url[1:]], u''
+        assert isinstance(url, unicode)
+        unquoted = urllib.unquote(url[1:].encode('utf8')).decode('utf8')
+        return [unquoted], u''
 
     def generate(self, args, url):
         assert(len(args) == 1)
-        return [], u'%s%s' % (url, args[0])
+        remaining = args[0]
+        assert isinstance(remaining, unicode)
+        return [], u'%s%s' % (url, remaining)
 
