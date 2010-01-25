@@ -4,7 +4,7 @@ import os
 import sys
 import urllib
 import urlparse
-import StringIO
+import cStringIO
 
 import webob
 
@@ -17,7 +17,7 @@ from ...http import reason_phrases
 def wrap_tornado(app):
     def new(tornado_request):
         #TODO: jperla: wrap into complete wsgi-like request
-        args = '&'.join('%s=%s' % (urllib.quote(k),urllib.quote(v[0])) for k,v in tornado_request.arguments.iteritems())
+        #args = '&'.join('%s=%s' % (urllib.quote(k),urllib.quote(v[0])) for k,v in tornado_request.arguments.iteritems())
         req = webob_request_from_tornado_request(tornado_request)
         body = app(req)
         status, headers = body.next()
@@ -43,7 +43,9 @@ def wrap_tornado(app):
 
 def webob_request_from_tornado_request(tornado_request):
     #return webob.Request.blank(tornado_request.uri)
-    return webob.Request(wsgi_environ_from_tornado_request(tornado_request))
+    environ = wsgi_environ_from_tornado_request(tornado_request)
+    req = webob.Request(environ)
+    return req
 
 
 def wsgi_environ_from_tornado_request(tornado_request):
@@ -62,7 +64,7 @@ def wsgi_environ_from_tornado_request(tornado_request):
     environ['SERVER_PROTOCOL'] = tornado_request.version
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.url_scheme'] = scheme
-    environ['wsgi.input'] = StringIO.StringIO(tornado_request.body)
+
     environ['wsgi.errors'] = sys.stderr
     environ['wsgi.multithread'] = True
     environ['wsgi.multiprocess'] = True
@@ -70,7 +72,14 @@ def wsgi_environ_from_tornado_request(tornado_request):
     environ['PWD'] = os.getcwd()
     for h,v in tornado_request.headers.iteritems():
         environ['HTTP_%s' % h.upper().replace('-', '_')] = v
-    #TODO: jperla: put in content type and length for file uploads ?
+
+    environ['wsgi.input'] = cStringIO.StringIO(tornado_request.body)
+    if 'HTTP_CONTENT_LENGTH' in environ:
+        environ['CONTENT_LENGTH'] = environ['HTTP_CONTENT_LENGTH']
+    else:
+        environ['CONTENT_LENGTH'] = len(tornado_request.body)
+    if 'HTTP_CONTENT_TYPE' in environ:
+        environ['CONTENT_TYPE'] = environ['HTTP_CONTENT_TYPE']
     return environ
 
 def start(app, host=None, port=8088):
