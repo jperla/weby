@@ -26,11 +26,11 @@ def test_index():
 
 def test_url_generation():
     hello = simplest.app
-    url = hello.url('joe')
+    url = hello.url(u'joe')
     assert url == u'/joe'
 
 def test_simplest():
-    with get(weby.wsgify(simplest.app), '/world?times=3') as r:
+    with get(weby.wsgify(simplest.app), u'/world?times=3') as r:
         assert u'200' in r.status
         body = r.body
         assert u'world' in body
@@ -38,7 +38,7 @@ def test_simplest():
         assert len(re.findall('world', body)) == 3
 
 def test_unicode():
-    with get(weby.wsgify(simplest.app), '/wểrld?times=3') as r:
+    with get(weby.wsgify(simplest.app), u'/wểrld?times=3') as r:
         assert u'200' in r.status
         assert u'wểrld' in r.body.decode('utf8')
         assert u'Hello, wểrld!' in r.body.decode('utf8')
@@ -62,7 +62,7 @@ def test_redirect():
 
 
 def test_remaining_url_arg_parser():
-    with get(weby.wsgify(simplest.app), '/joe?times=10') as r:
+    with get(weby.wsgify(simplest.app), u'/joe?times=10') as r:
         assert u'200' in r.status
         assert u'joe' in r.body
         assert u'Hello, joe!' in r.body
@@ -79,7 +79,7 @@ def test_time_diff():
     assert u'hours' not in diff
 
 def test_template():
-    with get(weby.wsgify(first_template.app), '/hello?name=joe') as r:
+    with get(weby.wsgify(first_template.app), u'/hello?name=joe') as r:
         assert u'200' in r.status
         assert u'joe' in r.body
         assert u'Hello, joe!' in r.body

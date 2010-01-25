@@ -73,12 +73,13 @@ class WSGIApp(object):
         req = Request(environ)
         try:
             resp = self.app(req)
-            status, headers = resp.next()
+            #TODO: jperla: expand name?
+            s, h = resp.next()
         except status.HTTPController, exception:
             resp = exception
             return resp(environ, start_response)
         else:
-            start_response(status, headers)
+            start_response(s, h)
             return list(resp)
 
 class MiddleApp(WebyApp):

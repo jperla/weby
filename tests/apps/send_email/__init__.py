@@ -16,7 +16,7 @@ def send(req, page):
 
 mail_server = weby.email.TestMailServer()
 settings = {'mail_server': mail_server}
-app = weby.apps.SettingsApp(settings, app)
+app = weby.apps.SettingsMiddleApp(settings, app)
 
 if __name__ == '__main__':
     weby.run(weby.wsgify(app))

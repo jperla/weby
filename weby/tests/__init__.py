@@ -5,14 +5,16 @@ import types
 
 @contextmanager
 def get(app, path, host='http://localhost'):
-    assert(not isinstance(path, unicode), u'Must ask for encoded path')
+    if isinstance(path, unicode):
+        path = path.encode('utf8')
     req = http.Request.blank(host + path)
     response = req.get_response(app)
     yield response
 
 @contextmanager
 def post(app, path, data, host='http://localhost'):
-    assert(not isinstance(path, unicode), u'Must ask for encoded path')
+    if isinstance(path, unicode):
+        path = path.encode('utf8')
     req = http.Request.blank(host + path)
     req.method = u'POST'
     for key in data:
