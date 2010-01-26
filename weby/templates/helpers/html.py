@@ -111,6 +111,7 @@ for tag in __all_html_tags:
     #TODO: jperla: dont use exec for this
     exec('%s = _html_element("%s")' % (tag, tag))
 
+#TODO: jperla: pre code broken for with statement
 pre_code = _generate_element('<pre', '><code>','</code></pre>', {})
 
 '''
