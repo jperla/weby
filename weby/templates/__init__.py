@@ -120,6 +120,9 @@ class CleanObject(object):
         self.sanitizer = sanitizer
         self.o = o
 
+    def __bool__(self):
+        return bool(self.o)
+
     def __eq__(self, x):
         return self.o == x
 
