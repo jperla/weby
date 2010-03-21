@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import types
 
 from . import helpers
 
@@ -120,6 +121,9 @@ class CleanObject(object):
         self.sanitizer = sanitizer
         self.o = o
 
+    def __bool__(self):
+        return bool(self.o)
+
     def __eq__(self, x):
         return self.o == x
 
@@ -173,6 +177,14 @@ class CleanObject(object):
             return value
         elif value is None:
             return None
+        elif isinstance(value, types.IntType):
+            return value
+        elif isinstance(value, types.LongType):
+            return value
+        elif isinstance(value, types.FloatType):
+            return value
+        elif isinstance(value, types.BooleanType):
+            return value
         else:
             return CleanObject(self.sanitizer, value)
 
