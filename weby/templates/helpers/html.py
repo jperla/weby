@@ -101,7 +101,7 @@ def _html_element(tag):
 #TODO: jperla: find all tags
 __all_html_tags = [
 'h1', 'h2', 'h3', 'h4', 'h5',
-'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 
+'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 'u'
 'table', 'thead', 'tbody', 'tr', 'th', 'td',
 'img', 'span', 'div', 'code', 'pre',
 'html', 'head', 'body', 'title', 'meta', 'link', 'script',
