@@ -104,6 +104,7 @@ __all_html_tags = [
 'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 'u',
 'table', 'thead', 'tbody', 'tr', 'th', 'td',
 'img', 'span', 'div', 'code', 'pre',
+'blockquote',
 'html', 'head', 'body', 'title', 'meta', 'link', 'script',
 'form', 'textarea', 'input', 'button',
 ]
