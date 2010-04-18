@@ -50,7 +50,7 @@ class WebyPage(object):
                 yield x
         else:
             #TODO: jperla: make this yielding and working
-            for x in self.__response.append(x):
+            for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
                 yield x
 
 def page():
