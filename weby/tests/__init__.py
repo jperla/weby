@@ -25,7 +25,7 @@ def post(app, path, data, host='http://localhost'):
 
 @contextmanager
 def difference(f, amount=None, message=''):
-    assert(isinstance(f, types.FunctionType), u'difference() takes a function to call as the first argument which it calls twice: once before and once after')
+    assert isinstance(f, types.FunctionType), u'difference() takes a function to call as the first argument which it calls twice: once before and once after' 
     original = f()
     yield
     new = f()
