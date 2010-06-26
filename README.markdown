@@ -1,5 +1,5 @@
 Weby
-======
+====
 The lazy man's web framework.
 
 
@@ -76,7 +76,7 @@ Weby still needs, in order,
 - Standard template filters
 - Forms
 
-- Sessions and authentication*
+- Sessions (cryptographic) and authentication*
 - CSRF protection
 
 - Layout system for templates
@@ -87,7 +87,12 @@ Weby still needs, in order,
 
 - Synchronous and asynchronous signals and dispatchers*
 
-- PyQuery based templates
+- better dependencies handling:  chardet, tornado, pyinotify, ...
+- better image handling
+
+- url tree building, better *debuggable* urls
+
+- PyQuery based templates?
 
 Requires some kind of hard data decision***:
 
