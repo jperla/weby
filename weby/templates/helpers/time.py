@@ -19,7 +19,12 @@ def fuzzy_time_diff(begin, end=None):
     
     str = u''
     tStr = u''
-    if days > 0:
+    if days > 61:
+        months = int(days / 30)
+        assert(months > 1)
+        str = str + u'%s months' % months
+        return str
+    elif days > 0:
         if days == 1:   tStr = u'day'
         else:           tStr = u'days'
         str = str + u'%s %s' %(days, tStr)
@@ -40,5 +45,5 @@ def fuzzy_time_diff(begin, end=None):
         str = str + u'%s %s' %(seconds, tStr)
         return str
     else:
-        return None
+        return '0 seconds'
 
