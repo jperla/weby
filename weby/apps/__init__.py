@@ -3,6 +3,7 @@ import chardet
 
 from ..templates import recursively_iterate
 
+from ..urls import Url
 
 class WebyApp(object):
     def __init__(self):
@@ -15,14 +16,14 @@ class WebyApp(object):
         #TODO: jperla: use this everywhere somehow
         def decorator(self, subapp, suburl):
             if self.parent is None:
-                return suburl
+                return Url(suburl)
             else:
                 return self.parent.wrap_url(self, suburl)
         return decorator
 
     @wrap_parent
     def wrap_url(self, subapp, suburl):
-        return suburl
+        return Url(suburl)
 
 class WebyPage(object):
     def __init__(self):
@@ -52,6 +53,8 @@ class WebyPage(object):
             #TODO: jperla: make this yielding and working
             for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
                 yield x
+        #TODO: jperla: not an extra newline (needed now in case __response is empty)
+        yield '\n'
 
 def page():
     def decorator(f):

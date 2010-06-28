@@ -101,12 +101,12 @@ def _html_element(tag):
 #TODO: jperla: find all tags
 __all_html_tags = [
 'h1', 'h2', 'h3', 'h4', 'h5',
-'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 'u',
-'table', 'thead', 'tbody', 'tr', 'th', 'td',
-'img', 'span', 'div', 'code', 'pre',
+'p', 'b', 'a', 'em', 'i', 'ol', 'ul', 'li', 'u', 
+'table', 'thead', 'tbody', 'tr', 'th', 'td', 'tfoot', 'tt',
+'img', 'span', 'div', 'code', 'pre', 'small', 'font',
 'blockquote',
 'html', 'head', 'body', 'title', 'meta', 'link', 'script',
-'form', 'textarea', 'input', 'button',
+'form', 'textarea', 'input', 'button', 'select', 'option',
 ]
 for tag in __all_html_tags:
     #TODO: jperla: dont use exec for this

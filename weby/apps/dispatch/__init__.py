@@ -6,6 +6,7 @@ import wsgiref
 from wsgiref import util
 
 from ...http import status
+from ...urls import Url
 from .. import WebyApp
 from ..standard import HTTP404App
 
@@ -34,7 +35,7 @@ class DispatchApp(WebyApp):
     def wrap_url(self, subapp, suburl):
         url = self.parented_url(subapp, suburl)
         if self.parent is None:
-            return url
+            return Url(url)
         else:
             return self.parent.wrap_url(self, url)
 
