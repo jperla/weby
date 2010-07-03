@@ -168,12 +168,12 @@ def __merge(d1, d2):
     #assert isinstance(d2, dict), '%s not a dict' % d2
     return dict([(k,v) for k,v in itertools.chain(d1.iteritems(), d2.iteritems())])
 
-input = lambda attrs: _generate_tag(u'input',
+temp_input = lambda attrs: _generate_tag(u'input',
                                     __merge({u'type':u'text'}, attrs))(None)
 
 def _generate_input(type):
     def new_input(name=None, value=None, id=None, attrs={}):
-        return input(__merge({u'type':type,
+        return temp_input(__merge({u'type':type,
                               u'name':name,
                               u'value':value,
                               u'id':id,}, attrs))
