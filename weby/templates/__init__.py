@@ -13,6 +13,16 @@ def recursively_iterate(item):
             for i in recursively_iterate(subitem):
                 yield i
 
+def recursively_iterate_bytes(item):
+    if isinstance(item, str):
+        yield item
+    elif isinstance(item, unicode):
+        raise Exception(u'Always work with bytes here: %s', item)
+    else:
+        for subitem in item:
+            for i in recursively_iterate_bytes(subitem):
+                yield i
+
 def join(f):
     '''Decorator which recursively iterate over a template to join it'''
     def decorated(*args, **kwargs):

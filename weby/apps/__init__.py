@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import chardet
 
-from ..templates import recursively_iterate
+from ..templates import recursively_iterate, recursively_iterate_bytes
 
 from ..urls import Url
 
@@ -50,9 +50,9 @@ class WebyPage(object):
             for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
                 yield x
         else:
-            #TODO: jperla: make this yielding and working
-            for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
+            for x in recursively_iterate_bytes(self.__response):
                 yield x
+
         #TODO: jperla: not an extra newline (needed now in case __response is empty)
         yield '\n'
 

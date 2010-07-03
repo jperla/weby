@@ -50,7 +50,7 @@ except ImportError, e:
     logging.info('werkzeug could not be imported')
 else:
     def werkzeug_serve(app, host, port, reload=False):
-        werkzeug.run_simple(host, port, app, use_reloader=reload)
+        werkzeug.run_simple(host, port, app, threaded=True, use_reloader=reload)
     serve = werkzeug_serve
         
 
