@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+# From Weby code
+# (C) 2010 Joseph Javier Perla
 import os
 import sys
 import signal
 from functools import partial
 
 import pyinotify
-from ..http import server
 
 def notifier_in_directory(callback, directory=os.getcwd()):
     '''
@@ -78,3 +80,5 @@ def watcher_launcher():
     notifier = notifier_in_directory(receive_with_changes, dir)
     notifier.loop()
 
+if __name__=='__main__':
+    watcher_launcher()
