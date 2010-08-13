@@ -14,7 +14,11 @@ class Url(object):
             self._q = q
 
     def q(self, d):
+        #TODO: jperla: merge q's
         return Url(self.url, d)
+
+    def add(self, s):
+        return Url(self.url, self._q)
 
     def __str__(self):
         base = self.url
