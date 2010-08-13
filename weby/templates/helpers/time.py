@@ -19,6 +19,13 @@ def fuzzy_time_diff(begin, end=None):
     
     str = u''
     tStr = u''
+    if days > 365:
+        years = int(days / 365)
+        if years == 1:
+            str = str + u'over 1 year'
+        else:
+            str = str + u'over %s years' % years
+        return str
     if days > 61:
         months = int(days / 30)
         assert(months > 1)
