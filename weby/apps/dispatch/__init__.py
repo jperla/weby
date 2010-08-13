@@ -90,3 +90,34 @@ class SimpleDispatchApp(DispatchApp):
             return (u'/' + self.urls[subapp] + suburl).replace(u'//', u'/')
 
 
+class BooleanDispatchApp(DispatchApp):
+    def __init__(self, default=None):
+        self.default = default
+        self.apps = {}
+        DispatchApp.__init__(self)
+
+    def default_subapp(self, *args, **kwargs):
+        assert(self.default is None)
+        def subapp_decorator(subapp):
+            assert(subapp.parent is None)
+            subapp.parent = self
+            self.default = subapp
+            return subapp
+        return subapp_decorator
+
+    def dispatched_app_and_request(self, req):
+        for boolean in self.apps:
+            if boolean(req):
+                return self.apps[boolean], req
+        else:
+            if self.default is not None:
+                return self.default, req
+            else:
+                return HTTP404App(), req
+
+    def register_subapp(self, subapp, boolean):
+        self.apps[boolean] = subapp
+
+    def parented_url(self, subapp, suburl):
+        return suburl
+
