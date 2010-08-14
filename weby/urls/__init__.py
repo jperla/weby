@@ -14,7 +14,11 @@ class Url(object):
             self._q = q
 
     def q(self, d):
-        return Url(self.url, d)
+        new_q = dict([(k,v) for k,v in self._q] + [(k,v) for k,v in d])
+        return Url(self.url, new_q)
+
+    def __add__(self, s):
+        return Url(self.url + s, self._q)
 
     def __str__(self):
         base = self.url
