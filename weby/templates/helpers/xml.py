@@ -24,8 +24,8 @@ def node_block(element_name, attributes={}):
     return u'<%s%s>\n' % (element_name, attrs_string), u'</%s>\n' % element_name
 
 def cdata(content):
-    return  u'<![CDATA[>%s\n]]>' % content
+    return  u'<![CDATA[%s\n]]>' % content
     
 def cdata_block():
-    return u'<![CDATA[>', u'\n]]>'
+    return (u'<![CDATA[', u'\n]]>')
     
