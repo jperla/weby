@@ -14,7 +14,7 @@ class Url(object):
             self._q = q
 
     def q(self, d):
-        new_q = dict([(k,v) for k,v in self._q] + [(k,v) for k,v in d])
+        new_q = dict([(k,v) for k,v in self._q] + [(k,v) for k,v in d.iteritems()])
         return Url(self.url, new_q)
 
     def __add__(self, s):
