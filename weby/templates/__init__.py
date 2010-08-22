@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import types
 
 from . import helpers
 
@@ -10,6 +11,16 @@ def recursively_iterate(item):
     else:
         for subitem in item:
             for i in recursively_iterate(subitem):
+                yield i
+
+def recursively_iterate_bytes(item):
+    if isinstance(item, str):
+        yield item
+    elif isinstance(item, unicode):
+        raise Exception(u'Always work with bytes here: %s', item)
+    else:
+        for subitem in item:
+            for i in recursively_iterate_bytes(subitem):
                 yield i
 
 def join(f):
@@ -120,6 +131,9 @@ class CleanObject(object):
         self.sanitizer = sanitizer
         self.o = o
 
+    def __bool__(self):
+        return bool(self.o)
+
     def __eq__(self, x):
         return self.o == x
 
@@ -173,6 +187,14 @@ class CleanObject(object):
             return value
         elif value is None:
             return None
+        elif isinstance(value, types.IntType):
+            return value
+        elif isinstance(value, types.LongType):
+            return value
+        elif isinstance(value, types.FloatType):
+            return value
+        elif isinstance(value, types.BooleanType):
+            return value
         else:
             return CleanObject(self.sanitizer, value)
 

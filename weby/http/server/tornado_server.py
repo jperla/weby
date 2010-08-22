@@ -82,7 +82,7 @@ def wsgi_environ_from_tornado_request(tornado_request):
         environ['CONTENT_TYPE'] = environ['HTTP_CONTENT_TYPE']
     return environ
 
-def start(app, host=None, port=8088):
+def start(app, host=None, port=8088, num_processes=1):
     assert not isinstance(app, WSGIApp), 'Tornado server does not support WSGIApps'
     assert isinstance(app, WebyApp), 'Tornado server wrapper supports WebyApps'
     tornado_app = wrap_tornado(app)

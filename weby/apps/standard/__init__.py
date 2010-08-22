@@ -8,11 +8,12 @@ from .. import urlable, page, WebyApp
 from ... import urls
 from ...http import status
 from ...http.headers import content_types
+import mimetypes
 
 def HTTP404App():
     def f(req):
         headers = [content_types.html_utf8]
-        yield 404, headers
+        yield '404 Not Found', headers
         yield 'Page not found'
     return f
 
@@ -27,15 +28,20 @@ def static(file_root):
         if os.path.exists(path) and os.path.isfile(path):
             #TODO: jperla: cache the static stuff forever
             #TODO: jperla: switch on image type
-            headers = [content_types.image_png]
-            yield 200, headers
-            #TODO: jperla: make this read in chunks
-            encoding = 'raw_unicode_escape'#chardet.detect(path)['encoding']
-            yield codecs.open(path, 'rb', encoding).read()
-            #yield open(path, 'rb').read()
+            content_type, encoding = mimetypes.guess_type(path, strict=False)
+            headers = [('Content-Type', content_type)]
+            if encoding is not None:
+                headers += [('Content-Encoding', encoding)]
+            yield '200 OK', headers
+            #TODO: jperla: make this read and return in chunks
+            if content_type.startswith('text'):
+                data = codecs.open(path, 'r', 'utf-8').read().encode('utf-8')
+            else:
+                data = open(path, 'rb').read()
+            yield data
         else:
             #TODO: jperla: weby is not defined; namespace it
-            p(http.status.not_found())
+            yield http.status.not_found()
     return static
 
 
