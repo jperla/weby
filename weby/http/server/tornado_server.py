@@ -8,6 +8,8 @@ import cStringIO
 
 from ...lib import webob
 
+#TODO: jperla: import local tornado, and if 
+# that fails use this tornado
 from ...lib import tornado.httpserver
 from ...lib import tornado.ioloop
 from ...lib import tornado.web
