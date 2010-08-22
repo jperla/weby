@@ -23,7 +23,7 @@ Example: a complete Weby application
             page(u'Hello, %s!<br />' % (name or u'world'))
 
     if __name__ == '__main__':
-        weby.run(weby.wsgify(app))
+        weby.http.server.tornado.start(app)
 
 Programming and Design Philosophy
 =================================
