@@ -13,7 +13,7 @@ serve = wsgiref_serve
 
 
 '''
-# jperla: Ignore paste for now because it sucks
+# jperla: Ignore paste for now because its server sucks
 try:
     import paste
 except ImportError, e:
@@ -52,7 +52,5 @@ else:
     def werkzeug_serve(app, host, port, reload=False):
         werkzeug.run_simple(host, port, app, threaded=True, use_reloader=reload)
     serve = werkzeug_serve
-        
-
         
 from . import tornado_server as tornado

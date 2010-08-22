@@ -6,7 +6,7 @@ import urllib
 import urlparse
 import cStringIO
 
-import webob
+from ...lib import webob
 
 import tornado.httpserver
 import tornado.ioloop

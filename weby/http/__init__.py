@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import logging
 
 
-import webob as _webob
+from ..lib import webob as _webob
 #Request = _webob.Request
 Response = _webob.Response
 # jperla: override to do chardet on all incoming data
