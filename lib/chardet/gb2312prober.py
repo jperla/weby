@@ -1,0 +1,1 @@
+/usr/share/pyshared/chardet/gb2312prober.py
