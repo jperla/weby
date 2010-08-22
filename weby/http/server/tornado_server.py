@@ -8,9 +8,9 @@ import cStringIO
 
 from ...lib import webob
 
-import tornado.httpserver
-import tornado.ioloop
-import tornado.web
+from ...lib import tornado.httpserver
+from ...lib import tornado.ioloop
+from ...lib import tornado.web
 
 from ...http import reason_phrases
 
