@@ -95,6 +95,7 @@ def start(app, host=None, port=8088, num_processes=1):
     try:
         tornado.ioloop.IOLoop.instance().start(num_processes)
     except:
+        print 'Starting only one process...'
         # probably using old tornado version
         tornado.ioloop.IOLoop.instance().start()
 
