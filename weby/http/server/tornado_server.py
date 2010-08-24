@@ -92,7 +92,11 @@ def start(app, host=None, port=8088, num_processes=1):
     tornado_app = wrap_tornado(app)
     http_server = tornado.httpserver.HTTPServer(tornado_app)
     http_server.listen(port)
-    tornado.ioloop.IOLoop.instance().start()
+    try:
+        tornado.ioloop.IOLoop.instance().start(num_processes)
+    except:
+        # probably using old tornado version
+        tornado.ioloop.IOLoop.instance().start()
 
 serve = start
 
