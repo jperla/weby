@@ -6,13 +6,13 @@ import codecs
 
 from .. import urlable, page, WebyApp
 from ... import urls
-from ...http import status
+from ...http import status, defaults
 from ...http.headers import content_types
 import mimetypes
 
 def HTTP404App():
     def f(req):
-        headers = [content_types.html_utf8]
+        headers = list(defaults.status_and_headers[1].iteritems())
         yield '404 Not Found', headers
         yield 'Page not found'
     return f
