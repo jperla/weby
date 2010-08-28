@@ -24,9 +24,9 @@ import socket
 import time
 import urlparse
 
-from tornado import httputil
-from tornado import ioloop
-from tornado import iostream
+from . import httputil
+from . import ioloop
+from . import iostream
 
 try:
     import fcntl
