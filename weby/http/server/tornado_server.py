@@ -93,11 +93,15 @@ def start(app, host=None, port=8088, num_processes=1):
     http_server = tornado.httpserver.HTTPServer(tornado_app)
     http_server.listen(port)
     try:
-        tornado.ioloop.IOLoop.instance().start(num_processes)
-    except:
-        print 'Starting only one process...'
-        # probably using old tornado version
-        tornado.ioloop.IOLoop.instance().start()
+        http_server.start()
+    except Exception, e:
+        print e
+        try:
+            tornado.ioloop.IOLoop.instance().start(num_processes)
+        except:
+            print 'Starting only one process...'
+            # probably using old tornado version
+            tornado.ioloop.IOLoop.instance().start()
 
 serve = start
 
