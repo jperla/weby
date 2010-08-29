@@ -29,7 +29,8 @@ class WebyPage(object):
     def __init__(self):
         self.__response = []
         status, headers = defaults.status_and_headers
-        self.status, self.headers = status, list(headers)
+        self.status, self.headers = status, headers
+        self.extended_headers = []
 
     def __call__(self, x):
         self.print_response(x)
@@ -40,21 +41,23 @@ class WebyPage(object):
     def redirect(self, url, type=302):
         assert type == 301 or type == 302, 'Redirect must be 301 or 302'
         self.status = '%s %s' % (type, reason_phrases[type])
-        self.headers.append(('Location', url))
+        self.headers['Location'] = url
 
     def response(self):
-        yield self.status, self.headers
-        #TODO: jperla: serious work needed here
-        if self.headers[0] == headers.content_types.html_utf8:
-            #TODO: jperla: make this yielding and working
+        all_headers = [(k,v) for k,v in self.headers.iteritems()] + self.extended_headers
+        yield self.status, all_headers
+        response_empty = True
+        utf8 = headers.content_types.html_utf8
+        if ('Content-Type', utf8['Content-Type']) in all_headers:
             for x in output_encoding(recursively_iterate(self.__response), 'utf8'):
+                response_empty = False
                 yield x
         else:
             for x in recursively_iterate_bytes(self.__response):
+                response_empty = False
                 yield x
-
-        #TODO: jperla: not an extra newline (needed now in case __response is empty)
-        yield '\n'
+        if response_empty:
+            yield '\n'
 
 def page():
     def decorator(f):

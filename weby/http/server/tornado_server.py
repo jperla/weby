@@ -10,11 +10,8 @@ from ...lib import webob
 
 #TODO: jperla: import local tornado, and if 
 # that fails use this tornado
-from ...lib import tornado
-
-import tornado.httpserver
-import tornado.ioloop
-import tornado.web
+from ...lib.tornado import httpserver
+from ...lib.tornado import ioloop
 
 from ...http import reason_phrases
 
@@ -90,19 +87,9 @@ def start(app, host=None, port=8088, num_processes=1):
     assert not isinstance(app, WSGIApp), 'Tornado server does not support WSGIApps'
     assert isinstance(app, WebyApp), 'Tornado server wrapper supports WebyApps'
     tornado_app = wrap_tornado(app)
-    http_server = tornado.httpserver.HTTPServer(tornado_app)
-    http_server.listen(port)
-    try:
-        http_server.start()
-    except Exception, e:
-        print e
-        try:
-            tornado.ioloop.IOLoop.instance().start(num_processes)
-        except:
-            print 'Starting only one process...'
-            # probably using old tornado version
-            tornado.ioloop.IOLoop.instance().start()
-
-serve = start
+    http_server = httpserver.HTTPServer(tornado_app)
+    http_server.bind(port)
+    http_server.start(num_processes)
+    ioloop.IOLoop.instance().start()
 
 from ...apps import WSGIApp, WebyApp

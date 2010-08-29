@@ -24,7 +24,7 @@ import select
 import time
 import traceback
 
-from tornado import stack_context
+from . import stack_context
 
 try:
     import signal
