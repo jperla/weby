@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-import chardet
+from ..lib import chardet
 
 from ..templates import recursively_iterate, recursively_iterate_bytes
 

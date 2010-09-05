@@ -80,7 +80,7 @@ try:
 except ImportError:
     from webob.util.stringtemplate import Template
 import types
-from webob import Response, Request, html_escape
+from .__init__ import Response, Request, html_escape
 
 newstyle_exceptions = issubclass(Exception, object)
 
