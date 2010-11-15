@@ -29,7 +29,7 @@ class WebyPage(object):
     def __init__(self):
         self.__response = []
         status, headers = defaults.status_and_headers
-        self.status, self.headers = status, headers
+        self.status, self.headers = status, dict(headers)
         self.extended_headers = []
 
     def __call__(self, x):
