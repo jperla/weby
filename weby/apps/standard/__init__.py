@@ -41,7 +41,7 @@ def static(file_root):
             yield data
         else:
             #TODO: jperla: weby is not defined; namespace it
-            yield http.status.not_found()
+            yield status.not_found()
     return static
 
 
