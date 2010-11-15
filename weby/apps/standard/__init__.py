@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import os
 
-import chardet
+from ...lib import chardet
 import codecs
 
 from .. import urlable, page, WebyApp

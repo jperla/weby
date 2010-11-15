@@ -6,14 +6,13 @@ import sys
 import signal
 from functools import partial
 
-import pyinotify
-
 def notifier_in_directory(callback, directory=os.getcwd()):
     '''
     event: {'maskname': 'IN_DELETE', 'wd': 1, 'name': 'bla', 'mask': 512, 'pathname': '/home/jperla/projects/weby/bla', 'path': '/home/jperla/projects/weby', 'dir': False}
     Events Codes (masknames): http://pyinotify.sourceforge.net/doc-v07/public/pyinotify.EventsCodes-class.html
     '''
     # The watch manager stores the watches and provides operations on watches
+    import pyinotify
     wm = pyinotify.WatchManager()
     FLAGS = pyinotify.EventsCodes.ALL_FLAGS
     mask = FLAGS['IN_DELETE'] | FLAGS['IN_CREATE']  # watched events

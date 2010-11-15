@@ -3,11 +3,11 @@ Represents the Cache-Control header
 """
 
 import re
-from webob.updatedict import UpdateDict
+from updatedict import UpdateDict
 try:
     sorted
 except NameError:
-    from webob.compat import sorted
+    from compat import sorted
 
 token_re = re.compile(
     r'([a-zA-Z][a-zA-Z_-]*)\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?')

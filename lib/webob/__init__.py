@@ -12,14 +12,14 @@ import time
 import calendar
 import tempfile
 import warnings
-from webob.datastruct import EnvironHeaders
-from webob.multidict import MultiDict, UnicodeMultiDict, NestedMultiDict, NoVars
-from webob.etag import AnyETag, NoETag, ETagMatcher, IfRange, NoIfRange
-from webob.headerdict import HeaderDict
-from webob.statusreasons import status_reasons
-from webob.cachecontrol import CacheControl, serialize_cache_control
-from webob.acceptparse import Accept, MIMEAccept, NilAccept, MIMENilAccept, NoAccept
-from webob.byterange import Range, ContentRange
+from datastruct import EnvironHeaders
+from multidict import MultiDict, UnicodeMultiDict, NestedMultiDict, NoVars
+from etag import AnyETag, NoETag, ETagMatcher, IfRange, NoIfRange
+from headerdict import HeaderDict
+from statusreasons import status_reasons
+from cachecontrol import CacheControl, serialize_cache_control
+from acceptparse import Accept, MIMEAccept, NilAccept, MIMENilAccept, NoAccept
+from byterange import Range, ContentRange
 try:
     sorted
 except NameError:

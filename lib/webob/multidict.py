@@ -6,7 +6,7 @@ Gives a multi-value dictionary object (MultiDict) plus several wrappers
 import cgi
 import copy
 import sys
-from webob.util.dictmixin import DictMixin
+from util.dictmixin import DictMixin
 try:
     reversed
 except NameError:

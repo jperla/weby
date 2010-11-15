@@ -2,7 +2,7 @@
 Contains some data structures.
 """
 
-from webob.util.dictmixin import DictMixin
+from util.dictmixin import DictMixin
 
 class EnvironHeaders(DictMixin):
     """An object that represents the headers as present in a

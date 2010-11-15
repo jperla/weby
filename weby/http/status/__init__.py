@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from webob import exc as _exc
+from ...lib.webob import exc as _exc
 
 ok = '200 OK'
 
